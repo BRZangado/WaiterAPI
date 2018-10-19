@@ -1,11 +1,14 @@
 package com.example.waiter.models;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 @Entity
 public class Product implements Serializable{
@@ -18,6 +21,8 @@ public class Product implements Serializable{
 	private String name;
 	private int price_cents;
 	private String description;
+	@ManyToMany(mappedBy = "products")
+	private List<OrderList> orders = new ArrayList<>();
 	
 	public Product(String name, int price_cents, String description) {
 		this.name = name;
@@ -27,6 +32,12 @@ public class Product implements Serializable{
 	
 	public Product() {}
 	
+	public List<OrderList> getOrders() {
+		return orders;
+	}
+	public void setOrders(List<OrderList> orders) {
+		this.orders = orders;
+	}
 	public Long getId() {
 		return id;
 	}
