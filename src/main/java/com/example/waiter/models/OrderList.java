@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 
+@Entity
 public class OrderList implements Serializable{
 	
 	private static final long serialVersionUID = -4680500884760864937L;
@@ -23,10 +25,13 @@ public class OrderList implements Serializable{
 	@JoinTable(name = "order_products")
 	private List<Product> products = new ArrayList<>();
 	
-	public OrderList(int total_price, List<Product> products) {
-		super();
-		this.total_price = total_price;
+	public OrderList(List<Product> products) {
+		this.total_price = 0;
 		this.products = products;
+		for(Product product : products) {
+			this.total_price += product.getPrice_cents();
+		}
+		
 	}
 	
 	public OrderList() {}
@@ -43,8 +48,12 @@ public class OrderList implements Serializable{
 	public void setTotal_price(int total_price) {
 		this.total_price = total_price;
 	}
-	public List<Product> getProducts() {
-		return products;
+	public List<Long> getProducts() {
+		List<Long> products_ids = new ArrayList<>();
+		for(Product product : this.products) {
+			products_ids.add(product.getId());
+		}
+		return products_ids;
 	}
 	public void setProducts(List<Product> products) {
 		this.products = products;
